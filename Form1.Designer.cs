@@ -20,6 +20,8 @@
             btnSave = new Button();
             btnLoad = new Button();
             clbTasks = new CheckedListBox();
+            lblProgress = new Label();
+            cmbStudents = new ComboBox();
 
             SuspendLayout();
 
@@ -63,8 +65,31 @@
             Controls.Add(clbTasks);
             Controls.Add(btnLoad);
             Controls.Add(btnSave);
+            Controls.Add(lblProgress);
+            Controls.Add(cmbStudents);
             Name = "Form1";
             Text = "Student Task Manager";
+
+            // 
+            // lblProgress
+            // 
+            lblProgress.AutoSize = true;
+            lblProgress.Location = new Point(50, 210);
+            lblProgress.Name = "lblProgress";
+            lblProgress.Size = new Size(120, 15);
+            lblProgress.TabIndex = 3;
+            lblProgress.Text = "Completed: 0 / 0";
+
+            // 
+            // cmbStudents
+            // 
+            cmbStudents.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbStudents.FormattingEnabled = true;
+            cmbStudents.Location = new Point(50, 10);
+            cmbStudents.Name = "cmbStudents";
+            cmbStudents.Size = new Size(300, 23);
+            cmbStudents.TabIndex = 0;
+            cmbStudents.SelectedIndexChanged += cmbStudents_SelectedIndexChanged;
 
             ResumeLayout(false);
         }
@@ -74,5 +99,8 @@
         private Button btnSave;
         private Button btnLoad;
         private CheckedListBox clbTasks;
+        private Label lblProgress;
+        private ComboBox cmbStudents;
+
     }
 }
