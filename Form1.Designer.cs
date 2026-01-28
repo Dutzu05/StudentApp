@@ -17,6 +17,35 @@
 
         private void InitializeComponent()
         {
+            // TextBox pentru student nou
+            txtStudent = new TextBox();
+            txtStudent.Location = new Point(50, 50);
+            txtStudent.Size = new Size(150, 23);
+            Controls.Add(txtStudent);
+
+            // Buton pentru student nou
+            btnAddStudent = new Button();
+            btnAddStudent.Location = new Point(210, 50);
+            btnAddStudent.Size = new Size(75, 23);
+            btnAddStudent.Text = "Add";
+            btnAddStudent.Click += AddStudent_Click;
+            Controls.Add(btnAddStudent);
+
+            // TextBox pentru task nou
+            txtTask = new TextBox();
+            txtTask.Location = new Point(370, 80);
+            txtTask.Size = new Size(150, 23);
+            Controls.Add(txtTask);
+
+            // Buton pentru task nou
+            btnAddTask = new Button();
+            btnAddTask.Location = new Point(530, 80);
+            btnAddTask.Size = new Size(75, 23);
+            btnAddTask.Text = "Add Task";
+            btnAddTask.Click += AddTask_Click;
+            Controls.Add(btnAddTask);
+
+
             btnSave = new Button();
             btnLoad = new Button();
             clbTasks = new CheckedListBox();
@@ -101,6 +130,11 @@
         private CheckedListBox clbTasks;
         private Label lblProgress;
         private ComboBox cmbStudents;
+        private TextBox txtStudent;
+        private Button btnAddStudent;
+        private TextBox txtTask;
+        private Button btnAddTask;
+
 
     }
 }

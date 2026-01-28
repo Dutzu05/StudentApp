@@ -101,6 +101,33 @@ namespace StudentTaskManager
             UpdateProgress();
         }
 
+        private void AddStudent_Click(object sender, EventArgs e)
+        {
+            var name = txtStudent.Text.Trim();
+            if (string.IsNullOrEmpty(name)) return;
+
+            if (!students.Any(s => s.Name == name))
+            {
+                students.Add(new Student { Name = name });
+                cmbStudents.DataSource = null;
+                cmbStudents.DataSource = students;
+                cmbStudents.DisplayMember = "Name";
+                txtStudent.Clear();
+            }
+        }
+
+        private void AddTask_Click(object sender, EventArgs e)
+        {
+            if (currentStudent == null) return;
+
+            var title = txtTask.Text.Trim();
+            if (string.IsNullOrEmpty(title)) return;
+
+            currentStudent.Tasks.Add(new TaskItem { Title = title, IsCompleted = false });
+            RefreshTaskList();
+            txtTask.Clear();
+        }
+
 
         private void btnSave_Click(object sender, EventArgs e)
         {
