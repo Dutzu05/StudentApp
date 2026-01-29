@@ -1,79 +1,71 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
-using System.Windows.Forms;
+﻿using StudentTaskManager.Services;
 
 namespace StudentTaskManager
 {
     public partial class Form1 : Form
     {
+        private StudentsManager studentsmanager = new StudentsManager();
         public Form1()
         {
             InitializeComponent();
         }
 
-        // BUTON SAVE
-        private void btnSave_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            AppData data = new AppData
-            {
-                Studenti = new List<Student>
-                {
-                    new Student { Id = 1, Nume = "Ana" },
-                    new Student { Id = 2, Nume = "Ion" }
-                },
-                Taskuri = new List<StudentTask>
-                {
-                    new StudentTask { Titlu = "Tema 1", Completat = false },
-                    new StudentTask { Titlu = "Proiect", Completat = true }
-                }
-            };
 
-            string json = JsonSerializer.Serialize(data, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
-
-            File.WriteAllText("data.json", json);
-            MessageBox.Show("Datele au fost salvate!");
         }
 
-        // BUTON LOAD
-        private void btnLoad_Click(object sender, EventArgs e)
+        private void label1_Click(object sender, EventArgs e)
         {
-            if (!File.Exists("data.json"))
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAdauga_Click(object sender, EventArgs e)
+        {
+            string nume = txtNume.Text;
+            string prenume = txtPrenume.Text;
+            try
             {
-                MessageBox.Show("Nu exista fisierul data.json");
-                return;
+                studentsmanager.AddStudent(nume, prenume);
+                RefreshTabel();
+                MessageBox.Show("Student adaugat cu succes!");
+                txtNume.Clear();    
+                txtPrenume.Clear();
+            }
+            catch (ArgumentNullException ex)
+            {
+                MessageBox.Show(ex.Message);
             }
 
-            string json = File.ReadAllText("data.json");
-            AppData data = JsonSerializer.Deserialize<AppData>(json);
-
-            MessageBox.Show(
-                $"Incarcati {data.Studenti.Count} studenti si {data.Taskuri.Count} taskuri."
-            );
         }
-    }
 
-    // clase demo
-
-    public class Student
-    {
-        public int Id { get; set; }
-        public string Nume { get; set; }
-    }
-
-    public class StudentTask
-    {
-        public string Titlu { get; set; }
-        public bool Completat { get; set; }
-    }
-
-    public class AppData
-    {
-        public List<Student> Studenti { get; set; }
-        public List<StudentTask> Taskuri { get; set; }
+        private void btnSterge_Click(object sender, EventArgs e)
+        {
+            string nume = txtNume.Text;
+            string prenume = txtPrenume.Text;
+            try
+            {
+                studentsmanager.RemoveStudent(nume, prenume);
+                RefreshTabel();
+                MessageBox.Show("Student sters cu succes!");
+                txtNume.Clear();     
+                txtPrenume.Clear();
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void RefreshTabel()
+        {
+            var students = studentsmanager.GetAllStudents();
+            dataGridView1.DataSource = null;
+            dataGridView1.DataSource = students;
+        }
     }
 }
