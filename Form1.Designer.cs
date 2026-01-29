@@ -17,110 +17,112 @@
 
         private void InitializeComponent()
         {
-            // TextBox pentru student nou
-            txtStudent = new TextBox();
-            txtStudent.Location = new Point(50, 50);
-            txtStudent.Size = new Size(150, 23);
-            Controls.Add(txtStudent);
-
-            // Buton pentru student nou
-            btnAddStudent = new Button();
-            btnAddStudent.Location = new Point(210, 50);
-            btnAddStudent.Size = new Size(75, 23);
-            btnAddStudent.Text = "Add";
-            btnAddStudent.Click += AddStudent_Click;
-            Controls.Add(btnAddStudent);
-
-            // TextBox pentru task nou
-            txtTask = new TextBox();
-            txtTask.Location = new Point(370, 80);
-            txtTask.Size = new Size(150, 23);
-            Controls.Add(txtTask);
-
-            // Buton pentru task nou
-            btnAddTask = new Button();
-            btnAddTask.Location = new Point(530, 80);
-            btnAddTask.Size = new Size(75, 23);
-            btnAddTask.Text = "Add Task";
-            btnAddTask.Click += AddTask_Click;
-            Controls.Add(btnAddTask);
-
-
-            btnSave = new Button();
-            btnLoad = new Button();
-            clbTasks = new CheckedListBox();
-            lblProgress = new Label();
-            cmbStudents = new ComboBox();
-
             SuspendLayout();
 
-            // 
-            // clbTasks
-            // 
-            clbTasks.FormattingEnabled = true;
-            clbTasks.Location = new Point(50, 40);
-            clbTasks.Name = "clbTasks";
-            clbTasks.Size = new Size(300, 154);
-            clbTasks.TabIndex = 0;
-            clbTasks.ItemCheck += clbTasks_ItemCheck;
+            cmbStudents = new ComboBox();
+            clbTasks = new CheckedListBox();
+            lblProgress = new Label();
+            btnSave = new Button();
+            btnLoad = new Button();
 
-            // 
-            // btnSave
-            // 
-            btnSave.Location = new Point(205, 255);
-            btnSave.Name = "btnSave";
-            btnSave.Size = new Size(75, 23);
-            btnSave.TabIndex = 1;
-            btnSave.Text = "Save";
-            btnSave.UseVisualStyleBackColor = true;
-            btnSave.Click += btnSave_Click;
-
-            // 
-            // btnLoad
-            // 
-            btnLoad.Location = new Point(325, 255);
-            btnLoad.Name = "btnLoad";
-            btnLoad.Size = new Size(75, 23);
-            btnLoad.TabIndex = 2;
-            btnLoad.Text = "Load";
-            btnLoad.UseVisualStyleBackColor = true;
-
-            // 
-            // Form1
-            // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(clbTasks);
-            Controls.Add(btnLoad);
-            Controls.Add(btnSave);
-            Controls.Add(lblProgress);
-            Controls.Add(cmbStudents);
-            Name = "Form1";
-            Text = "Student Task Manager";
-
-            // 
-            // lblProgress
-            // 
-            lblProgress.AutoSize = true;
-            lblProgress.Location = new Point(50, 210);
-            lblProgress.Name = "lblProgress";
-            lblProgress.Size = new Size(120, 15);
-            lblProgress.TabIndex = 3;
-            lblProgress.Text = "Completed: 0 / 0";
-
-            // 
-            // cmbStudents
-            // 
             cmbStudents.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbStudents.FormattingEnabled = true;
             cmbStudents.Location = new Point(50, 10);
             cmbStudents.Name = "cmbStudents";
-            cmbStudents.Size = new Size(300, 23);
+            cmbStudents.Size = new Size(350, 23);
             cmbStudents.TabIndex = 0;
             cmbStudents.SelectedIndexChanged += cmbStudents_SelectedIndexChanged;
 
+            clbTasks.FormattingEnabled = true;
+            clbTasks.Location = new Point(50, 50);
+            clbTasks.Name = "clbTasks";
+            clbTasks.Size = new Size(350, 220);
+            clbTasks.TabIndex = 1;
+            clbTasks.ItemCheck += clbTasks_ItemCheck;
+
+            lblProgress.AutoSize = true;
+            lblProgress.Location = new Point(50, 285);
+            lblProgress.Name = "lblProgress";
+            lblProgress.Size = new Size(120, 15);
+            lblProgress.TabIndex = 2;
+            lblProgress.Text = "Completed: 0 / 0";
+
+            int x = 450;
+
+            var lblStudent = new Label();
+            lblStudent.Text = "New student:";
+            lblStudent.Location = new Point(x, 10);
+            lblStudent.AutoSize = true;
+            Controls.Add(lblStudent);
+
+            txtStudent = new TextBox();
+            txtStudent.Location = new Point(x, 30);
+            txtStudent.Size = new Size(240, 23);
+            Controls.Add(txtStudent);
+
+            btnAddStudent = new Button();
+            btnAddStudent.Location = new Point(x + 250, 30);
+            btnAddStudent.Size = new Size(80, 23);
+            btnAddStudent.Text = "Add";
+            btnAddStudent.Click += AddStudent_Click;
+            Controls.Add(btnAddStudent);
+
+            var lblTask = new Label();
+            lblTask.Text = "New task + deadline:";
+            lblTask.Location = new Point(x, 70);
+            lblTask.AutoSize = true;
+            Controls.Add(lblTask);
+
+            txtTask = new TextBox();
+            txtTask.Location = new Point(x, 90);
+            txtTask.Size = new Size(330, 23);
+            Controls.Add(txtTask);
+
+            dtpDeadline = new DateTimePicker();
+            dtpDeadline.Location = new Point(x, 120);
+            dtpDeadline.Size = new Size(240, 23);
+            dtpDeadline.Format = DateTimePickerFormat.Short;
+            dtpDeadline.Value = DateTime.Today.AddDays(7);
+            Controls.Add(dtpDeadline);
+
+            btnAddTask = new Button();
+            btnAddTask.Location = new Point(x + 250, 120);
+            btnAddTask.Size = new Size(80, 23);
+            btnAddTask.Text = "Add Task";
+            btnAddTask.Click += AddTask_Click;
+            Controls.Add(btnAddTask);
+
+            btnSave.Location = new Point(450, 285);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(75, 23);
+            btnSave.TabIndex = 3;
+            btnSave.Text = "Save";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
+
+            btnLoad.Location = new Point(550, 285);
+            btnLoad.Name = "btnLoad";
+            btnLoad.Size = new Size(75, 23);
+            btnLoad.TabIndex = 4;
+            btnLoad.Text = "Load";
+            btnLoad.UseVisualStyleBackColor = true;
+
+            // --- form ---
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Name = "Form1";
+            Text = "Student Task Manager";
+
+            // adaugari in form (stanga + jos)
+            Controls.Add(cmbStudents);
+            Controls.Add(clbTasks);
+            Controls.Add(lblProgress);
+            Controls.Add(btnSave);
+            Controls.Add(btnLoad);
+
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -134,6 +136,9 @@
         private Button btnAddStudent;
         private TextBox txtTask;
         private Button btnAddTask;
+
+        private DateTimePicker dtpDeadline;
+
 
 
     }

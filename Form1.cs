@@ -50,11 +50,29 @@ namespace StudentTaskManager
                 cmbStudents.SelectedIndex = 0; // triggers selection event or you set manually below
             }
         }
+         private void ShowOverdueNotification()
+        {
+            if (currentStudent == null) return;
+
+            int overdueCount = currentStudent.Tasks.Count(t => t.IsOverdue);
+            if (overdueCount > 0)
+            {
+                MessageBox.Show($"{currentStudent.Name} are {overdueCount} task-uri overdue!",
+                    "Overdue tasks",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
+
+
+       
 
         private void cmbStudents_SelectedIndexChanged(object sender, EventArgs e)
         {
             currentStudent = cmbStudents.SelectedItem as Student;
             RefreshTaskList();
+            //ShowOverdueNotification();
+
         }
 
 
@@ -85,10 +103,13 @@ namespace StudentTaskManager
 
             foreach (var task in currentStudent.Tasks)
             {
-                clbTasks.Items.Add(task.Title, task.IsCompleted);
-            }
+                 var text = $"{task.Title} | due: {task.Deadline:yyyy-MM-dd}";
+                if (task.IsOverdue) text = "!!!" + text + " (Overdue)";
 
+                clbTasks.Items.Add(text, task.IsCompleted);
+            }
             UpdateProgress();
+            ShowOverdueNotification();
         }
 
 
@@ -123,7 +144,13 @@ namespace StudentTaskManager
             var title = txtTask.Text.Trim();
             if (string.IsNullOrEmpty(title)) return;
 
-            currentStudent.Tasks.Add(new TaskItem { Title = title, IsCompleted = false });
+        currentStudent.Tasks.Add(new TaskItem
+        {
+            Title = title,
+            IsCompleted = false,
+            Deadline = dtpDeadline.Value.Date
+        });
+
             RefreshTaskList();
             txtTask.Clear();
         }
