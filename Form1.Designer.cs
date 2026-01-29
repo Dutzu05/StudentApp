@@ -92,6 +92,28 @@
             btnAddTask.Click += AddTask_Click;
             Controls.Add(btnAddTask);
 
+            btnDeleteTask = new Button();
+            btnDeleteTask.Location = new Point(x, 150);
+            btnDeleteTask.Size = new Size(100, 23);
+            btnDeleteTask.Text = "Delete Task";
+            btnDeleteTask.Click += DeleteTask_Click;
+            Controls.Add(btnDeleteTask);
+
+            // Global Task Section
+            var lblGlobalTask = new Label();
+            lblGlobalTask.Text = "Global task for students:";
+            lblGlobalTask.Location = new Point(x, 190);
+            lblGlobalTask.AutoSize = true;
+            lblGlobalTask.Font = new Font(lblGlobalTask.Font, FontStyle.Bold);
+            Controls.Add(lblGlobalTask);
+
+            btnAddGlobalTask = new Button();
+            btnAddGlobalTask.Location = new Point(x, 215);
+            btnAddGlobalTask.Size = new Size(150, 30);
+            btnAddGlobalTask.Text = "Create Global Task...";
+            btnAddGlobalTask.Click += AddGlobalTask_Click;
+            Controls.Add(btnAddGlobalTask);
+
             btnSave.Location = new Point(450, 285);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
@@ -105,7 +127,7 @@
             // 
             // btnLoad
             // 
-            btnLoad.Location = new Point(325, 255);
+            btnLoad.Location = new Point(535, 285);
             btnLoad.Name = "btnLoad";
             btnLoad.Size = new Size(75, 23);
             btnLoad.TabIndex = 4;
@@ -141,8 +163,11 @@
         private Button btnAddStudent;
         private TextBox txtTask;
         private Button btnAddTask;
+        private Button btnDeleteTask;
 
         private DateTimePicker dtpDeadline;
+        
+        private Button btnAddGlobalTask;
 
 
 

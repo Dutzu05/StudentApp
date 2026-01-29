@@ -56,14 +56,14 @@ namespace StudentTaskManager
                 cmbStudents.SelectedIndex = 0; // triggers selection event or you set manually below
             }
         }
-         private void ShowOverdueNotification()
+        private void ShowOverdueNotification()
         {
             if (currentStudent == null) return;
 
             int overdueCount = currentStudent.Tasks.Count(t => t.IsOverdue);
             if (overdueCount > 0)
             {
-                MessageBox.Show($"{currentStudent.Name} are {overdueCount} task-uri overdue!",
+                MessageBox.Show($"{currentStudent.Name} has {overdueCount} overdue task(s)!",
                     "Overdue tasks",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -161,21 +161,85 @@ namespace StudentTaskManager
             txtTask.Clear();
         }
 
+        private void AddGlobalTask_Click(object sender, EventArgs e)
+        {
+            if (students.Count == 0)
+            {
+                MessageBox.Show("No students available to assign the global task!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (var globalTaskForm = new GlobalTaskForm(students))
+            {
+                if (globalTaskForm.ShowDialog() == DialogResult.OK)
+                {
+                    var globalTask = new TaskItem
+                    {
+                        Title = globalTaskForm.TaskTitle,
+                        IsCompleted = false,
+                        Deadline = globalTaskForm.TaskDeadline
+                    };
+
+                    foreach (var student in globalTaskForm.SelectedStudents)
+                    {
+                        student.Tasks.Add(new TaskItem
+                        {
+                            Title = globalTask.Title,
+                            IsCompleted = globalTask.IsCompleted,
+                            Deadline = globalTask.Deadline
+                        });
+                    }
+
+                    RefreshTaskList();
+                    
+                    MessageBox.Show($"Global task '{globalTask.Title}' added to {globalTaskForm.SelectedStudents.Count} student(s)!", 
+                        "Success", 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        private void DeleteTask_Click(object sender, EventArgs e)
+        {
+            if (currentStudent == null)
+            {
+                MessageBox.Show("Please select a student first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (clbTasks.SelectedIndex < 0)
+            {
+                MessageBox.Show("Please select a task to delete!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int selectedIndex = clbTasks.SelectedIndex;
+            if (selectedIndex >= 0 && selectedIndex < currentStudent.Tasks.Count)
+            {
+                var taskToDelete = currentStudent.Tasks[selectedIndex];
+                var result = MessageBox.Show(
+                    $"Are you sure you want to delete the task '{taskToDelete.Title}'?",
+                    "Confirm Delete",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    currentStudent.Tasks.RemoveAt(selectedIndex);
+                    RefreshTaskList();
+                    MessageBox.Show("Task deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
         // BUTON SAVE
         private void btnSave_Click(object sender, EventArgs e)
         {
             AppData data = new AppData
             {
-                Studenti = new List<Student>
-                {
-                    new Student { Id = 1, Nume = "Ana" },
-                    new Student { Id = 2, Nume = "Ion" }
-                },
-                Taskuri = new List<StudentTask>
-                {
-                    new StudentTask { Titlu = "Tema 1", Completat = false },
-                    new StudentTask { Titlu = "Proiect", Completat = true }
-                }
+                Students = students,
+                Tasks = currentStudent?.Tasks ?? new List<TaskItem>()
             };
 
             string json = JsonSerializer.Serialize(data, new JsonSerializerOptions
@@ -184,7 +248,7 @@ namespace StudentTaskManager
             });
 
             File.WriteAllText("data.json", json);
-            MessageBox.Show("Datele au fost salvate!");
+            MessageBox.Show("Data has been saved!");
         }
 
         // BUTON LOAD
@@ -192,40 +256,31 @@ namespace StudentTaskManager
         {
             if (!File.Exists("data.json"))
             {
-                MessageBox.Show("Nu exista fisierul data.json");
+                MessageBox.Show("The file data.json does not exist");
                 return;
             }
 
             string json = File.ReadAllText("data.json");
             AppData data = JsonSerializer.Deserialize<AppData>(json);
 
-            MessageBox.Show(
-                $"Incarcati {data.Studenti.Count} studenti si {data.Taskuri.Count} taskuri."
-            );
+            if (data != null && data.Students != null)
+            {
+                students = data.Students;
+                cmbStudents.DataSource = null;
+                cmbStudents.DataSource = students;
+                cmbStudents.DisplayMember = "Name";
+
+                MessageBox.Show(
+                    $"Loaded {data.Students.Count} student(s) with their tasks."
+                );
+            }
         }
     }
 
-    // clase demo
-
-    public class Student
-    {
-        public int Id { get; set; }
-        public string Nume { get; set; }
-    }
-
-    public class StudentTask
-    {
-        public string Titlu { get; set; }
-        public bool Completat { get; set; }
-    }
-
+    // Data class for JSON serialization
     public class AppData
     {
-        public List<Student> Studenti { get; set; }
-        public List<StudentTask> Taskuri { get; set; }
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            // Save logic comes next
-        }
+        public List<Student> Students { get; set; } = new();
+        public List<TaskItem> Tasks { get; set; } = new();
     }
 }
