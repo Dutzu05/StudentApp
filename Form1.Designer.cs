@@ -99,8 +99,13 @@
             btnSave.Text = "Save";
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
+            btnLoad.Click += btnLoad_Click;
 
-            btnLoad.Location = new Point(550, 285);
+
+            // 
+            // btnLoad
+            // 
+            btnLoad.Location = new Point(325, 255);
             btnLoad.Name = "btnLoad";
             btnLoad.Size = new Size(75, 23);
             btnLoad.TabIndex = 4;
